@@ -29,3 +29,6 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode("p", "Click me!", ["href", "highlight"])
         self.assertEqual(node.to_html(), "<p>Click me!</p>")
         
+        
+if __name__ == "__main__":
+    unittest.main()
