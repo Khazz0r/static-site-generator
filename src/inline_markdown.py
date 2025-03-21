@@ -1,6 +1,7 @@
 import re
 from textnode import TextNode, TextType
 
+
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     if delimiter == "**" or delimiter == "_" or delimiter == "`":
         new_nodes = []
@@ -23,6 +24,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     else:
         raise Exception("delimiter selected is not a valid delimiter")
     
+
 def split_nodes_image(old_nodes):
     new_nodes = []
 
@@ -78,8 +80,20 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, TextType.NORMAL))
     return new_nodes
 
+
 def extract_markdown_images(text):
     return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
 
+
 def extract_markdown_links(text):
     return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+
+def text_to_textnodes(text):
+    all_nodes = [TextNode(text, TextType.NORMAL)]
+    all_nodes = split_nodes_delimiter(all_nodes, "**", TextType.BOLD)
+    all_nodes = split_nodes_delimiter(all_nodes, "_", TextType.ITALIC)
+    all_nodes = split_nodes_delimiter(all_nodes, "`", TextType.CODE)
+    all_nodes = split_nodes_image(all_nodes)
+    all_nodes = split_nodes_link(all_nodes)
+    return all_nodes
