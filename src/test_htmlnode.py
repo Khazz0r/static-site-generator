@@ -22,7 +22,7 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(node.to_html(), '<a href="https://www.google.com" class="highlight">Click me!</a>')
     
     def test_leaf_to_html_no_tag(self):
-        node = LeafNode(value="Hello, world!")
+        node = LeafNode(None, "Hello, world!")
         self.assertEqual(node.to_html(), "Hello, world!")
     
     def test_leaf_to_html_no_dict(self):
