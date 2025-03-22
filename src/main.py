@@ -1,9 +1,13 @@
-import os, shutil
+import os, shutil, sys
 from block_markdown import markdown_to_html_node
 
 def main():
-    copy_static_to_public("static/", "public/")
-    generate_pages_recursive("content/", "template.html", "public/")
+    basepath = sys.argv[1]
+    if basepath == "":
+        basepath = "/"
+        
+    copy_static_to_public("static/", "docs/")
+    generate_pages_recursive("content/", "template.html", "docs/")
 
 
 def copy_static_to_public(static_dir, public_dir):
@@ -50,7 +54,11 @@ def generate_page(from_path, template_path, dest_path):
     html_contents = markdown_to_html_node(markdown_contents).to_html()
     title = extract_title(markdown_contents)
 
-    replaced_template_contents = template_contents.replace("{{ Title }}", title).replace("{{ Content }}", html_contents)
+    replaced_template_contents = (template_contents.replace("{{ Title }}", title)
+                                  .replace("{{ Content }}", html_contents)
+                                  .replace('href="/', 'href="{BASEPATH}')
+                                  .replace('src="/', 'src="{BASEPATH}')
+                                  )
 
     dest_path = os.path.splitext(dest_path)[0] + ".html"
 
